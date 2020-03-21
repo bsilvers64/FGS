@@ -1,10 +1,11 @@
-#!/usr/bin/env pyhton 3
+#!/usr/bin/env python 3
 from bs4 import BeautifulSoup
 import requests
 import docx
 # added header for fake user-agent
 # replace this with user-agent of your system. find it at - https://www.whatismybrowser.com/detect/what-is-my-user-agent
-headers = { #enter user-agent here }
+headers = {
+    "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.44'}
 
 url = "https://www.metacritic.com/feature/new-free-games-playstation-xbox-pc-switch"
 try:
@@ -27,15 +28,18 @@ for i in rows:
         row3.remove("")
     for j in title:
         row = []
-        name = j.find('a').get_text()
-        row.append(name)
-        link = j.find('a').get('href')
-        row.append(link)
-        li = doc.add_paragraph()
-        li.add_run(name).bold = True
-        li.add_run(" \n" + link + " \n" + row3[k] + "\n")
-        k += 1
-        row2.append(row)
+        if j.find('a') is None:
+            continue
+        else:
+            name = j.find('a').get_text()
+            row.append(name)
+            link = j.find('a').get('href')
+            row.append(link)
+            li = doc.add_paragraph()
+            li.add_run(name).bold = True
+            li.add_run(" \n" + link + " \n" + row3[k] + "\n")
+            k += 1
+            row2.append(row)
 
 #print(row2)
 #print(row3)
